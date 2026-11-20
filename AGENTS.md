@@ -28,3 +28,11 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project rules
+
+- Data access goes from the browser straight to the database through the generated client; every permission rule lives in RLS policies and guard triggers, so never rely on UI checks alone.
+- Roles live only in `public.user_roles` and are checked with `has_role()`; the designated admin email is provisioned by an auth trigger only after the address is confirmed.
+- Signed-in pages live under `src/routes/_authenticated/` (client-only gate, redirects to `/login`); student pages sit under the `_student` layout and admin pages under `admin/`, each gating by role.
+- Business rules (cancel/feedback/ordering) and form validation live in `src/lib/rules.ts` with tests in `src/test/rules.test.ts`; keep UI and database rules in step.
+- Visual language (ledger cards, stamps, top bar, tabs) is defined as component classes in `src/styles.css`; reuse them instead of ad hoc styles.
